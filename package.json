@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "name": "naver-cafe-post-comment-reffle",
+  "productName": "Naver Cafe Post Comment Raffle",
+  "description": "naver-cafe-raffle",
+  "author": {
+    "name": "Leejun Kim",
+    "email": "support@makeyone.com"
+  },
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "deploy:mac": "electron-builder --mac",
+    "deploy:win": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.makeyone.naverraffle",
+    "files": [
+      "**/*",
+      "!node_modules/.cache"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "mac": {
+      "icon": "icon.icns",
+      "target": ["dmg"]
+    },
+    "win": {
+      "icon": "icon.ico",
+      "target": "nsis"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "hwanam1111",
+        "repo": "electron-test",
+        "publishAutoUpdate": false
+      }
+    ],
+    "generateUpdatesFilesForAllChannels": false
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "lodash": "^4.17.21",
+    "puppeteer": "^24.8.2"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.2"
+  }
+}

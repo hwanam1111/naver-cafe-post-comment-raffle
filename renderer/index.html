@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>네이버 카페 댓글 추첨기</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    #lotteryForm {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      flex: 1;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 6px;
+    }
+
+    small {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background-color: #2f80ed;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1c64d1;
+    }
+
+    button.stop {
+      background-color: #e74c3c;
+    }
+
+    button.stop:hover {
+      background-color: #c0392b;
+    }
+
+    #logContainer {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #logContainer h3 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+
+    pre#output {
+      flex: 1;
+      overflow-y: auto;
+      background: #f0f0f0;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 15px;
+      white-space: pre-wrap;
+      max-height: 550px;
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="lotteryForm">
+      <h2>🧿 네이버 카페 댓글 추첨기</h2>
+
+      <label for="url">📎 게시글 URL</label>
+      <input name="url" id="url" required />
+
+      <label for="keyword">🔍 키워드</label>
+      <input name="keyword" id="keyword" required />
+
+      <label for="winnerCount">🎁 당첨자 수</label>
+      <input name="winnerCount" id="winnerCount" type="number" required />
+
+      <label for="postMin">📝 최소 게시글 수</label>
+      <input name="postMin" id="postMin" type="number" required />
+
+      <label for="excludeList">🚫 제외 닉네임 (쉼표로 구분)</label>
+      <small style="color: #888;">예시) 김이름,박이름,이이름,서이름</small>
+      <input name="excludeList" id="excludeList" />
+
+      <button type="submit">추첨 시작</button>
+    </form>
+
+    <div id="logContainer">
+      <h3>📜 실행 로그</h3>
+      <pre id="output"></pre>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('lotteryForm');
+    const output = document.getElementById('output');
+    const button = form.querySelector('button');
+    let isRunning = false;
+
+    function formatLogWithColor(message) {
+      if (message.startsWith('🔐') || message.includes('로그인')) {
+        return `<span style="color: orange;">${message}</span>`;
+      }
+      if (message.startsWith('✅') || message.includes('성공')) {
+        return `<span style="color: green;">${message}</span>`;
+      }
+      if (message.startsWith('❌') || message.includes('실패') || message.includes('오류')) {
+        return `<span style="color: red;">${message}</span>`;
+      }
+      if (message.startsWith('🎉') || message.startsWith('👉') || message.startsWith('🔎')) {
+        return `<span style="color: #007bff;">${message}</span>`;
+      }
+      if (message.startsWith('➡️')) {
+        return `<span style="color: purple;">${message}</span>`;
+      }
+      return `<span>${message}</span>`;
+    }
+
+    async function handleStart(formData) {
+      output.innerHTML = `<span>🔃 실행 중...</span><br />`;
+      isRunning = true;
+      button.textContent = '추첨 중단 (종료)';
+      button.classList.add('stop');
+
+      const result = await window.electronAPI.startLottery(formData);
+      output.innerHTML += formatLogWithColor(result) + '<br />';
+      output.scrollTop = output.scrollHeight;
+
+      button.textContent = '추첨 시작';
+      isRunning = false;
+      button.classList.remove('stop');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (isRunning) {
+        window.electronAPI.stopLottery();
+        button.textContent = '추첨 시작';
+        isRunning = false;
+        return;
+      }
+
+      const formData = Object.fromEntries(new FormData(form).entries());
+      formData.winnerCount = parseInt(formData.winnerCount);
+      formData.postMin = parseInt(formData.postMin);
+
+      handleStart(formData);
+    });
+
+    window.electronAPI.onLog((log) => {
+      output.innerHTML += formatLogWithColor(log) + '<br />';
+      output.scrollTop = output.scrollHeight;
+    });
+  </script>
+
+</body>
+</html>
