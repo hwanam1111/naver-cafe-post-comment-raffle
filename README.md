@@ -7,7 +7,7 @@
 
 최신 버전은 아래 GitHub 릴리즈 페이지에서 다운로드할 수 있습니다:
 
-👉 [🔗 릴리즈 바로가기](https://github.com/hwanam1111/electron-test/releases)
+👉 [🔗 릴리즈 바로가기](https://github.com/hwanam1111/naver-cafe-post-comment-raffle/releases)
 
 - Windows: `Naver-Cafe-Post-Comment-Raffle-Setup-*.exe`
 - macOS (Apple Silicon): `Naver-Cafe-Post-Comment-Raffle-*-arm64.dmg`
@@ -26,7 +26,7 @@
 
 ### Windows
 
-1. [릴리즈 페이지](https://github.com/hwanam1111/electron-test/releases)에서 `.exe` 파일 다운로드
+1. [릴리즈 페이지](https://github.com/hwanam1111/naver-cafe-post-comment-raffle/releases)에서 `.exe` 파일 다운로드
 2. 설치 후 실행 (Microsoft Defender SmartScreen 경고 시 `추가 정보 → 실행` 선택)
 
 ### macOS (Apple Silicon)
