@@ -1,5 +1,5 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "name": "naver-cafe-post-comment-raffle",
   "productName": "Naver Cafe Post Comment Raffle",
   "description": "naver-cafe-raffle",
@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "start": "electron .",
+    "postinstall": "npx puppeteer browsers install chrome",
     "deploy:mac": "electron-builder --mac",
     "deploy:win": "electron-builder --win --x64"
   },
@@ -23,6 +24,9 @@
     "directories": {
       "buildResources": "build"
     },
+    "asarUnpack": [
+      "node_modules/puppeteer/.local-chromium"
+    ],
     "mac": {
       "icon": "icon.icns",
       "target": ["dmg"]

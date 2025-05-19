@@ -8,6 +8,22 @@ const SELECTORS = {
   profileUrl: 'a.comment_thumb',
 };
 
+function getChromePath() {
+  const isWin = process.platform === 'win32';
+  const isMac = process.platform === 'darwin';
+
+  if (isWin) {
+    return 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+  }
+
+  if (isMac) {
+    return '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+  }
+
+  throw new Error('Chrome 설치 경로를 찾을 수 없습니다.');
+}
+
+
 module.exports = async function runPuppeteer({ url, keyword, winnerCount, postMin, excludeList }, log = () => {}, setBrowserRef = () => {}) {
   const excludeSet = new Set(
     excludeList.split(',').map(name => name.trim()).filter(Boolean)
@@ -19,6 +35,8 @@ module.exports = async function runPuppeteer({ url, keyword, winnerCount, postMi
   try {
     browser = await puppeteer.launch({
       headless: false,
+      // executablePath: puppeteer.executablePath(),
+      executablePath: getChromePath(),
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
