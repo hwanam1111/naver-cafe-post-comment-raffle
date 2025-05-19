@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "naver-cafe-post-comment-reffle",
   "productName": "Naver Cafe Post Comment Raffle",
   "description": "naver-cafe-raffle",
@@ -35,7 +35,7 @@
       {
         "provider": "github",
         "owner": "hwanam1111",
-        "repo": "electron-test",
+        "repo": "naver-cafe-post-comment-raffle",
         "publishAutoUpdate": false
       }
     ],
